@@ -1,174 +1,191 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cek Rekening</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&amp;display=swap');
-
-    :root {
-      --tw-color-primary: #22c55e;
-    }
-
-    body {
-      font-family: 'Poppins', system-ui, sans-serif;
-    }
-
-    .glass {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .type-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .type-card:hover {
-      transform: translateY(-6px) scale(1.03);
-      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-    }
-    
-    .type-card.active {
-      border-color: #22c55e;
-      background: rgba(34, 197, 94, 0.15);
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
-    }
-
-    .result {
-      animation: popIn 0.4s ease forwards;
-    }
-
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.95); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    .input-focus:focus {
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEK REKENING</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        .card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .result-box { animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] min-h-screen flex items-center justify-center p-6">
-  
-  <div class="max-w-md w-full mx-auto">
-    
-    <!-- HEADER LUCU -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center gap-3 bg-white/10 text-white px-8 py-4 rounded-3xl shadow-xl">
-        <span class="text-5xl drop-shadow-md">🔍</span>
-        <h1 class="text-4xl font-bold tracking-tighter">Cek Rekening</h1>
-      </div>
-      <p class="text-slate-400 mt-3 text-lg">Cek nama pemilik rekening &amp; e-wallet instan</p>
+<body class="bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white min-h-screen">
+    <div class="max-w-5xl mx-auto px-6 py-8">
+        <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-2xl shadow-lg">💰</div>
+                <div>
+                    <h1 class="text-4xl font-bold tracking-tight">CEK REKENING</h1>
+                    <p class="text-emerald-400 text-sm">Cek saldo & nama rekening instan</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-gray-800 text-xs px-4 py-2 rounded-3xl border border-gray-700">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span class="font-medium">API Siap • Balance tersisa</span>
+            </div>
+        </div>
+
+        <div class="flex border-b border-gray-700 mb-8">
+            <button onclick="switchTab(0)" id="tab-bank" class="tab-button flex-1 md:flex-none px-8 py-4 font-semibold text-lg border-b-4 border-emerald-500 text-emerald-400">🏦 Rekening Bank</button>
+            <button onclick="switchTab(1)" id="tab-ewallet" class="tab-button flex-1 md:flex-none px-8 py-4 font-semibold text-lg border-b-4 border-transparent hover:text-emerald-400">📱 E-Wallet</button>
+        </div>
+
+        <div class="grid md:grid-cols-12 gap-8">
+            <div class="md:col-span-5 bg-gray-900/70 border border-gray-700 rounded-3xl p-8 shadow-2xl card">
+                <!-- BANK FORM -->
+                <div id="form-bank">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center gap-3"><i class="fa-solid fa-building-columns"></i> Cek Rekening Bank</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Pilih Bank</label>
+                            <select id="bank-select" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Nomor Rekening</label>
+                            <input id="bank-account" type="text" placeholder="7921775851" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
+                        </div>
+                        <button onclick="cekBank()" class="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white font-semibold text-xl py-5 rounded-3xl flex items-center justify-center gap-3">🔎 CEK REKENING</button>
+                    </div>
+                </div>
+
+                <!-- EWALLET FORM -->
+                <div id="form-ewallet" class="hidden">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center gap-3"><i class="fa-solid fa-wallet"></i> Cek E-Wallet</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Pilih E-Wallet</label>
+                            <select id="ewallet-select" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Nomor Handphone</label>
+                            <input id="ewallet-account" type="text" placeholder="089514582678" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
+                        </div>
+                        <button onclick="cekEwallet()" class="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white font-semibold text-xl py-5 rounded-3xl flex items-center justify-center gap-3">🔎 CEK E-WALLET</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-7">
+                <div id="result-area" class="hidden bg-gray-900/70 border border-gray-700 rounded-3xl p-8 shadow-2xl min-h-[420px]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold" id="result-title">Hasil Pengecekan</h3>
+                        <button onclick="resetForm()" class="text-gray-400 hover:text-white flex items-center gap-1 text-sm"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                    </div>
+                    <div id="result-content"></div>
+                </div>
+
+                <div id="empty-state" class="bg-gray-900/30 border border-dashed border-gray-700 rounded-3xl p-12 text-center min-h-[420px] flex flex-col items-center justify-center">
+                    <div class="text-7xl mb-6 opacity-30">🔎</div>
+                    <h3 class="text-2xl font-medium mb-3">Siap mengecek?</h3>
+                    <p class="text-gray-400">Pilih jenis cek, isi data, lalu tekan tombol CEK</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- MAIN CARD -->
-    <div class="glass rounded-3xl p-8 shadow-2xl">
-      
-      <!-- PILIH TIPE → KOTAK2 LUCU -->
-      <div class="mb-8">
-        <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 font-semibold pl-1">Pilih Jenis</p>
-        <div class="grid grid-cols-2 gap-4">
-          
-          <!-- Bank Card -->
-          <button onclick="selectType('bank')" id="type-bank"
-            class="type-card active flex flex-col items-center justify-center py-7 rounded-3xl border-2 border-transparent bg-white/10 text-white">
-            <div class="w-20 h-20 bg-blue-500/20 rounded-2xl flex items-center justify-center text-5xl mb-4">🏦</div>
-            <span class="font-semibold text-2xl">Bank</span>
-            <span class="text-xs text-blue-300 mt-1">BCA • Mandiri • BRI dll</span>
-          </button>
+    <script>
+        const banks = [{code:"014",name:"BCA"},{code:"009",name:"BNI"},{code:"002",name:"BRI"},{code:"451",name:"BSI"},{code:"022",name:"CIMB"},{code:"542",name:"JAGO"},{code:"213",name:"JENIUS"},{code:"008",name:"MANDIRI"},{code:"426",name:"MEGA"},{code:"019",name:"PANIN"},{code:"013",name:"PERMATA"},{code:"535",name:"SEABANK"},{code:"153",name:"SINARMAS"}];
+        const ewalletList = [{code:"wallet_dana",name:"DANA"},{code:"wallet_gopay",name:"GOPAY"},{code:"wallet_linkaja",name:"LINKAJA"},{code:"wallet_ovo",name:"OVO"},{code:"wallet_shopeepay",name:"SHOPEEPAY"}];
+        const API_KEY = "ckr_ec10ee996a9e476386c5ae1e7be28123";
+        const API_URL = "https://app.apivalidasi.my.id/api/v3/validate";
 
-          <!-- E-Wallet Card -->
-          <button onclick="selectType('ewallet')" id="type-ewallet"
-            class="type-card flex flex-col items-center justify-center py-7 rounded-3xl border-2 border-transparent bg-white/10 text-white">
-            <div class="w-20 h-20 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-5xl mb-4">💳</div>
-            <span class="font-semibold text-2xl">E-Wallet</span>
-            <span class="text-xs text-emerald-300 mt-1">DANA • OVO • GoPay dll</span>
-          </button>
+        function populateSelects() {
+            const bankSelect = document.getElementById('bank-select');
+            banks.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.code;
+                opt.textContent = `${b.code} - ${b.name}`;
+                bankSelect.appendChild(opt);
+            });
+            const ewSelect = document.getElementById('ewallet-select');
+            ewalletList.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e.code;
+                opt.textContent = e.name;
+                ewSelect.appendChild(opt);
+            });
+        }
 
-        </div>
-      </div>
+        let currentTab = 0;
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-button').forEach((btn,i) => {
+                if(i === tab) btn.classList.add('border-emerald-500','text-emerald-400');
+                else btn.classList.remove('border-emerald-500','text-emerald-400');
+            });
+            document.getElementById('form-bank').classList.toggle('hidden', tab !== 0);
+            document.getElementById('form-ewallet').classList.toggle('hidden', tab === 0);
+            resetForm();
+        }
 
-      <!-- Hidden input agar script.js tetap jalan -->
-      <input type="hidden" id="type" value="bank">
+        async function callAPI(payload) {
+            const content = document.getElementById('result-content');
+            const resultArea = document.getElementById('result-area');
+            const empty = document.getElementById('empty-state');
+            
+            content.innerHTML = `<div class="flex flex-col items-center justify-center py-16"><div class="w-12 h-12 border-4 border-emerald-500 border-t-transparent animate-spin rounded-full mb-4"></div><p class="text-lg">Sedang mengecek...</p></div>`;
+            resultArea.classList.remove('hidden');
+            empty.classList.add('hidden');
 
-      <!-- FORM -->
-      <div class="space-y-6">
-        
-        <!-- Kode -->
-        <div>
-          <label class="block text-xs font-medium text-slate-300 mb-2 pl-1">KODE BANK / E-WALLET <span class="text-emerald-400">(opsional)</span></label>
-          <div class="relative">
-            <input type="text" id="kode" 
-              class="input-focus w-full bg-white/10 border border-white/30 focus:border-emerald-400 rounded-2xl px-6 py-5 text-white text-lg placeholder-slate-400 outline-none transition-all"
-              placeholder="Contoh: 014 atau kosongkan">
-          </div>
-        </div>
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                renderResult(data);
+            } catch (e) {
+                content.innerHTML = `<div class="bg-red-950 border border-red-500 rounded-2xl p-8 text-center"><i class="fa-solid fa-triangle-exclamation text-5xl text-red-400 mb-4"></i><p class="text-xl">Gagal terhubung ke API</p></div>`;
+            }
+        }
 
-        <!-- Nomor -->
-        <div>
-          <label class="block text-xs font-medium text-slate-300 mb-2 pl-1">NOMOR REKENING / HP</label>
-          <div class="relative">
-            <input type="text" id="nomor" 
-              class="input-focus w-full bg-white/10 border border-white/30 focus:border-emerald-400 rounded-2xl px-6 py-5 text-white text-lg placeholder-slate-400 outline-none transition-all"
-              placeholder="Masukkan nomor rekening atau HP">
-          </div>
-        </div>
+        function renderResult(json) {
+            const content = document.getElementById('result-content');
+            if (!json.status) {
+                content.innerHTML = `<div class="bg-red-950/60 border border-red-400 rounded-2xl p-8 text-center"><p class="text-xl">${json.message}</p></div>`;
+                return;
+            }
+            let html = `<div class="space-y-8"><div class="bg-emerald-900/30 border border-emerald-500/30 rounded-2xl p-6">`;
+            if (json.data.bank_name) {
+                html += `<div class="grid grid-cols-2 gap-6"><div><div class="text-xs text-emerald-400">BANK</div><div class="text-3xl font-bold">${json.data.bank_name}</div><div class="text-sm">Kode ${json.data.bank_code}</div></div><div><div class="text-xs text-emerald-400">NOMOR REKENING</div><div class="font-mono text-3xl">${json.data.account_number}</div></div><div class="col-span-2"><div class="text-xs text-emerald-400">NAMA PEMILIK</div><div class="text-3xl font-bold">${json.data.account_name}</div></div></div>`;
+            } else {
+                html += `<div class="grid grid-cols-2 gap-6"><div><div class="text-xs text-emerald-400">E-WALLET</div><div class="text-3xl font-bold">${json.data.ewallet_name}</div></div><div><div class="text-xs text-emerald-400">NOMOR HP</div><div class="font-mono text-3xl">${json.data.phone_number}</div></div><div class="col-span-2"><div class="text-xs text-emerald-400">NAMA AKUN</div><div class="text-3xl font-bold">${json.data.account_name}</div></div></div>`;
+            }
+            html += `</div><div class="bg-gray-800/60 rounded-2xl p-6"><div class="flex justify-between"><div><div class="text-xs text-gray-400">ID</div><div>${json.user_details.id} • ${json.user_details.name}</div></div><div class="text-right"><div class="text-xs text-gray-400">SALDO</div><div class="text-3xl text-emerald-400">Rp ${parseFloat(json.user_details.balance).toLocaleString('id-ID')}</div></div></div></div></div>`;
+            content.innerHTML = html;
+        }
 
-        <!-- BUTTON -->
-        <button onclick="cek()" id="btn"
-          class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl shadow-emerald-500/40">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <span>CEK SEKARANG</span>
-        </button>
-      </div>
+        function cekBank() {
+            const code = document.getElementById('bank-select').value;
+            const acc = document.getElementById('bank-account').value.trim();
+            if (!code || !acc) return alert('Isi nomor rekening!');
+            callAPI({type: "bank", accountNumber: acc, api_key: API_KEY});
+        }
 
-      <!-- LOADER -->
-      <div id="loader" class="hidden flex justify-center mt-8">
-        <div class="flex items-center gap-3 text-emerald-400">
-          <div class="w-6 h-6 border-4 border-white/30 border-t-emerald-400 rounded-full animate-spin"></div>
-          <span class="font-medium">Sedang mengecek...</span>
-        </div>
-      </div>
+        function cekEwallet() {
+            const code = document.getElementById('ewallet-select').value;
+            const acc = document.getElementById('ewallet-account').value.trim();
+            if (!code || !acc) return alert('Isi nomor HP!');
+            callAPI({type: "ewallet", code: code, accountNumber: acc, api_key: API_KEY});
+        }
 
-      <!-- RESULT -->
-      <div id="result" class="result hidden mt-8 rounded-3xl p-6 text-white"></div>
+        function resetForm() {
+            document.getElementById('result-area').classList.add('hidden');
+            document.getElementById('empty-state').classList.remove('hidden');
+            document.getElementById('bank-account').value = '';
+            document.getElementById('ewallet-account').value = '';
+        }
 
-    </div>
-
-    <!-- FOOTER -->
-    <div class="text-center text-slate-500 text-sm mt-10 flex items-center justify-center gap-2">
-      <i class="fa-solid fa-shield-halved"></i>
-      <span>Powered by apivalidasi.my.id • Aman &amp; Cepat</span>
-    </div>
-
-  </div>
-
-  <script>
-    // Fungsi untuk memilih tipe (kotak lucu)
-    function selectType(type) {
-      // Update hidden input
-      document.getElementById('type').value = type;
-
-      // Reset semua card
-      document.querySelectorAll('.type-card').forEach(card => {
-        card.classList.remove('active');
-      });
-
-      // Aktifkan card yang dipilih
-      const activeCard = document.getElementById(`type-${type}`);
-      if (activeCard) activeCard.classList.add('active');
-    }
-
-    // Set default ke Bank saat halaman dimuat
-    window.onload = function() {
-      selectType('bank');
-    };
-  </script>
-
-  <script src="script.js"></script>
+        window.onload = () => {
+            populateSelects();
+            console.log('%c✅ CEK REKENING siap!', 'color:#10b981;font-weight:bold');
+        };
+    </script>
 </body>
 </html>
