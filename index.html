@@ -27,7 +27,6 @@ body {
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 input, select {
@@ -36,7 +35,6 @@ input, select {
   margin: 6px 0;
   border-radius: 8px;
   border: none;
-  outline: none;
 }
 
 button {
@@ -48,11 +46,6 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: #16a34a;
 }
 
 .result {
@@ -63,13 +56,8 @@ button:hover {
   display: none;
 }
 
-.success {
-  border-left: 5px solid #22c55e;
-}
-
-.error {
-  border-left: 5px solid red;
-}
+.success { border-left: 5px solid #22c55e; }
+.error { border-left: 5px solid red; }
 
 .loader {
   border: 3px solid #333;
@@ -98,10 +86,10 @@ button:hover {
     <option value="ewallet">💳 E-Wallet</option>
   </select>
 
-  <input type="text" id="kode" placeholder="Kode (014 / gopay_user)">
+  <input type="text" id="kode" placeholder="Kode bank (opsional)">
   <input type="text" id="nomor" placeholder="Nomor rekening / HP">
 
-  <button onclick="cek()">Cek Sekarang</button>
+  <button id="btn" onclick="cek()">Cek Sekarang</button>
 
   <div class="loader" id="loader"></div>
 
