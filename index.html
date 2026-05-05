@@ -15,7 +15,7 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-[#0a0f1c] via-[#111827] to-[#0f172a] text-white min-h-screen">
-    <div class="max-w-6xl mx-auto px-6 py-10">
+    <div class="max-w-7xl mx-auto px-6 py-10">
         <!-- Header -->
         <div class="flex items-center justify-between mb-12">
             <div class="flex items-center gap-4">
@@ -75,9 +75,9 @@
                 </div>
             </div>
 
-            <!-- Hasil Pengecekan -->
+            <!-- HASIL PENGECEKAN (SUDAH DILEBARKAN LAGI) -->
             <div class="md:col-span-8">
-                <div id="result-area" class="hidden glass border border-white/10 rounded-3xl p-12 shadow-2xl min-h-[500px]">
+                <div id="result-area" class="hidden glass border border-white/10 rounded-3xl p-14 shadow-2xl min-h-[520px]">
                     <div class="flex justify-between items-center mb-8">
                         <h3 class="text-2xl font-semibold">Hasil Pengecekan</h3>
                         <button onclick="resetForm()" class="text-gray-400 hover:text-white flex items-center gap-2"><i class="fa-solid fa-rotate-right"></i> Reset</button>
@@ -85,7 +85,7 @@
                     <div id="result-content" class="result-box"></div>
                 </div>
 
-                <div id="empty-state" class="glass border border-white/10 rounded-3xl p-16 text-center min-h-[500px] flex flex-col items-center justify-center">
+                <div id="empty-state" class="glass border border-white/10 rounded-3xl p-16 text-center min-h-[520px] flex flex-col items-center justify-center">
                     <div class="text-8xl mb-8 opacity-40">🔎</div>
                     <h3 class="text-3xl font-medium mb-4">Siap mengecek?</h3>
                     <p class="text-gray-400">Pilih jenis cek, isi data, lalu tekan tombol CEK</p>
@@ -166,10 +166,10 @@
 
             const number = type === "bank" ? json.data.account_number : (json.data.phone_number || json.data.account_number);
 
-            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-14">`;
+            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-16">`;
             if (type === "bank") {
                 html += `
-                    <div class="grid grid-cols-2 gap-12">
+                    <div class="grid grid-cols-2 gap-14">
                         <div>
                             <div class="text-xs tracking-widest text-emerald-400">BANK</div>
                             <div class="text-4xl font-bold mt-3">${json.data.bank_name}</div>
@@ -179,14 +179,14 @@
                             <div class="text-xs tracking-widest text-emerald-400">NOMOR REKENING</div>
                             <div class="font-mono text-4xl font-bold mt-3">${number}</div>
                         </div>
-                        <div class="col-span-2 mt-10">
+                        <div class="col-span-2 mt-12">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA PEMILIK</div>
                             <div class="text-4xl font-bold mt-3">${json.data.account_name}</div>
                         </div>
                     </div>`;
             } else {
                 html += `
-                    <div class="grid grid-cols-2 gap-12">
+                    <div class="grid grid-cols-2 gap-14">
                         <div>
                             <div class="text-xs tracking-widest text-emerald-400">E-WALLET</div>
                             <div class="text-4xl font-bold mt-3">${json.data.ewallet_name}</div>
@@ -195,7 +195,7 @@
                             <div class="text-xs tracking-widest text-emerald-400">NOMOR HP</div>
                             <div class="font-mono text-4xl font-bold mt-3">${number}</div>
                         </div>
-                        <div class="col-span-2 mt-10">
+                        <div class="col-span-2 mt-12">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA AKUN</div>
                             <div class="text-4xl font-bold mt-3">${json.data.account_name}</div>
                         </div>
@@ -206,6 +206,7 @@
             saveToHistory(json, type);
         }
 
+        // Riwayat, fungsi cek, dll (tetap sama)
         function saveToHistory(json, type) {
             let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
             const entry = {
@@ -267,18 +268,6 @@
         window.onload = () => {
             populateSelects();
             renderHistory();
-
-            // === FITUR BARU: Tekan Enter langsung cek ===
-            const bankInput = document.getElementById('bank-account');
-            const ewalletInput = document.getElementById('ewallet-account');
-
-            bankInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') cekBank();
-            });
-
-            ewalletInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') cekEwallet();
-            });
         };
     </script>
 </body>
