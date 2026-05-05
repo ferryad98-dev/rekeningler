@@ -2,26 +2,112 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cek Rekening</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 15px;
+  width: 350px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #16a34a;
+}
+
+.result {
+  margin-top: 15px;
+  padding: 15px;
+  background: #020617;
+  border-radius: 8px;
+  display: none;
+}
+
+.success {
+  border-left: 5px solid #22c55e;
+}
+
+.error {
+  border-left: 5px solid red;
+}
+
+.loader {
+  border: 3px solid #333;
+  border-top: 3px solid #22c55e;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+  display: none;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+</style>
 </head>
 
 <body>
 
-<h2>Cek Rekening / Ewallet</h2>
+<div class="card">
+  <h2>🔍 Cek Rekening</h2>
 
-<select id="type">
-  <option value="bank">Bank</option>
-  <option value="ewallet">Ewallet</option>
-</select>
+  <select id="type">
+    <option value="bank">🏦 Bank</option>
+    <option value="ewallet">💳 E-Wallet</option>
+  </select>
 
-<input type="text" id="kode" placeholder="Kode (014 / gopay_user)">
-<input type="text" id="nomor" placeholder="Nomor rekening / HP">
+  <input type="text" id="kode" placeholder="Kode (014 / gopay_user)">
+  <input type="text" id="nomor" placeholder="Nomor rekening / HP">
 
-<button onclick="cek()">Cek</button>
+  <button onclick="cek()">Cek Sekarang</button>
 
-<div id="result"></div>
+  <div class="loader" id="loader"></div>
+
+  <div class="result" id="result"></div>
+</div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
