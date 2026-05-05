@@ -162,11 +162,23 @@
         }
 
         function cekBank() {
-            const code = document.getElementById('bank-select').value;
-            const acc = document.getElementById('bank-account').value.trim();
-            if (!code || !acc) return alert('Isi nomor rekening!');
-            callAPI({type: "bank", accountNumber: acc, api_key: API_KEY});
-        }
+    const bankCode = document.getElementById('bank-select').value;
+    const accountNumber = document.getElementById('bank-account').value.trim();
+    
+    if (!bankCode || !accountNumber) {
+        alert('Mohon pilih bank dan isi nomor rekening!');
+        return;
+    }
+
+    const payload = {
+        type: "bank",
+        code: bankCode,           // ← INI YANG KURANG!
+        accountNumber: accountNumber,
+        api_key: API_KEY
+    };
+
+    callAPI(payload);
+}
 
         function cekEwallet() {
             const code = document.getElementById('ewallet-select').value;
