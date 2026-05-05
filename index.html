@@ -1,101 +1,174 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cek Rekening</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cek Rekening</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&amp;display=swap');
 
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+    :root {
+      --tw-color-primary: #22c55e;
+    }
 
-.card {
-  background: #1e293b;
-  padding: 25px;
-  border-radius: 15px;
-  width: 350px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-}
+    body {
+      font-family: 'Poppins', system-ui, sans-serif;
+    }
 
-h2 {
-  text-align: center;
-}
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
 
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 6px 0;
-  border-radius: 8px;
-  border: none;
-}
+    .type-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .type-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+    
+    .type-card.active {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.15);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+    }
 
-button {
-  width: 100%;
-  padding: 12px;
-  background: #22c55e;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .result {
+      animation: popIn 0.4s ease forwards;
+    }
 
-.result {
-  margin-top: 15px;
-  padding: 15px;
-  background: #020617;
-  border-radius: 8px;
-  display: none;
-}
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
 
-.success { border-left: 5px solid #22c55e; }
-.error { border-left: 5px solid red; }
-
-.loader {
-  border: 3px solid #333;
-  border-top: 3px solid #22c55e;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  animation: spin 1s linear infinite;
-  margin: 10px auto;
-  display: none;
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-</style>
+    .input-focus:focus {
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+    }
+  </style>
 </head>
+<body class="bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] min-h-screen flex items-center justify-center p-6">
+  
+  <div class="max-w-md w-full mx-auto">
+    
+    <!-- HEADER LUCU -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-3 bg-white/10 text-white px-8 py-4 rounded-3xl shadow-xl">
+        <span class="text-5xl drop-shadow-md">🔍</span>
+        <h1 class="text-4xl font-bold tracking-tighter">Cek Rekening</h1>
+      </div>
+      <p class="text-slate-400 mt-3 text-lg">Cek nama pemilik rekening &amp; e-wallet instan</p>
+    </div>
 
-<body>
+    <!-- MAIN CARD -->
+    <div class="glass rounded-3xl p-8 shadow-2xl">
+      
+      <!-- PILIH TIPE → KOTAK2 LUCU -->
+      <div class="mb-8">
+        <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 font-semibold pl-1">Pilih Jenis</p>
+        <div class="grid grid-cols-2 gap-4">
+          
+          <!-- Bank Card -->
+          <button onclick="selectType('bank')" id="type-bank"
+            class="type-card active flex flex-col items-center justify-center py-7 rounded-3xl border-2 border-transparent bg-white/10 text-white">
+            <div class="w-20 h-20 bg-blue-500/20 rounded-2xl flex items-center justify-center text-5xl mb-4">🏦</div>
+            <span class="font-semibold text-2xl">Bank</span>
+            <span class="text-xs text-blue-300 mt-1">BCA • Mandiri • BRI dll</span>
+          </button>
 
-<div class="card">
-  <h2>🔍 Cek Rekening</h2>
+          <!-- E-Wallet Card -->
+          <button onclick="selectType('ewallet')" id="type-ewallet"
+            class="type-card flex flex-col items-center justify-center py-7 rounded-3xl border-2 border-transparent bg-white/10 text-white">
+            <div class="w-20 h-20 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-5xl mb-4">💳</div>
+            <span class="font-semibold text-2xl">E-Wallet</span>
+            <span class="text-xs text-emerald-300 mt-1">DANA • OVO • GoPay dll</span>
+          </button>
 
-  <select id="type">
-    <option value="bank">🏦 Bank</option>
-    <option value="ewallet">💳 E-Wallet</option>
-  </select>
+        </div>
+      </div>
 
-  <input type="text" id="kode" placeholder="Kode bank (opsional)">
-  <input type="text" id="nomor" placeholder="Nomor rekening / HP">
+      <!-- Hidden input agar script.js tetap jalan -->
+      <input type="hidden" id="type" value="bank">
 
-  <button id="btn" onclick="cek()">Cek Sekarang</button>
+      <!-- FORM -->
+      <div class="space-y-6">
+        
+        <!-- Kode -->
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-2 pl-1">KODE BANK / E-WALLET <span class="text-emerald-400">(opsional)</span></label>
+          <div class="relative">
+            <input type="text" id="kode" 
+              class="input-focus w-full bg-white/10 border border-white/30 focus:border-emerald-400 rounded-2xl px-6 py-5 text-white text-lg placeholder-slate-400 outline-none transition-all"
+              placeholder="Contoh: 014 atau kosongkan">
+          </div>
+        </div>
 
-  <div class="loader" id="loader"></div>
+        <!-- Nomor -->
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-2 pl-1">NOMOR REKENING / HP</label>
+          <div class="relative">
+            <input type="text" id="nomor" 
+              class="input-focus w-full bg-white/10 border border-white/30 focus:border-emerald-400 rounded-2xl px-6 py-5 text-white text-lg placeholder-slate-400 outline-none transition-all"
+              placeholder="Masukkan nomor rekening atau HP">
+          </div>
+        </div>
 
-  <div class="result" id="result"></div>
-</div>
+        <!-- BUTTON -->
+        <button onclick="cek()" id="btn"
+          class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl shadow-emerald-500/40">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>CEK SEKARANG</span>
+        </button>
+      </div>
 
-<script src="script.js"></script>
+      <!-- LOADER -->
+      <div id="loader" class="hidden flex justify-center mt-8">
+        <div class="flex items-center gap-3 text-emerald-400">
+          <div class="w-6 h-6 border-4 border-white/30 border-t-emerald-400 rounded-full animate-spin"></div>
+          <span class="font-medium">Sedang mengecek...</span>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div id="result" class="result hidden mt-8 rounded-3xl p-6 text-white"></div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="text-center text-slate-500 text-sm mt-10 flex items-center justify-center gap-2">
+      <i class="fa-solid fa-shield-halved"></i>
+      <span>Powered by apivalidasi.my.id • Aman &amp; Cepat</span>
+    </div>
+
+  </div>
+
+  <script>
+    // Fungsi untuk memilih tipe (kotak lucu)
+    function selectType(type) {
+      // Update hidden input
+      document.getElementById('type').value = type;
+
+      // Reset semua card
+      document.querySelectorAll('.type-card').forEach(card => {
+        card.classList.remove('active');
+      });
+
+      // Aktifkan card yang dipilih
+      const activeCard = document.getElementById(`type-${type}`);
+      if (activeCard) activeCard.classList.add('active');
+    }
+
+    // Set default ke Bank saat halaman dimuat
+    window.onload = function() {
+      selectType('bank');
+    };
+  </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
