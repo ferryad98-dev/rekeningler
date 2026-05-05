@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-2">Nomor Rekening</label>
-                            <input id="bank-account" type="text" placeholder="1690004571359" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
+                            <input id="bank-account" type="text" placeholder="000801095430501" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
                         </div>
                         <button onclick="cekBank()" class="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white font-semibold text-xl py-5 rounded-3xl flex items-center justify-center gap-3 shadow-lg">
                             🔎 CEK REKENING
@@ -172,7 +172,6 @@
             let html = `<div class="bg-emerald-900/30 border border-emerald-500/30 rounded-2xl p-6">`;
             
             if (json.data.bank_name) {
-                // Bank Result
                 html += `
                     <div class="grid grid-cols-2 gap-6">
                         <div>
@@ -182,7 +181,7 @@
                         </div>
                         <div>
                             <div class="text-xs uppercase text-emerald-400">NOMOR REKENING</div>
-                            <div class="font-mono text-3xl">${json.data.account_number}</div>
+                            <div class="font-mono text-2xl break-all">${json.data.account_number}</div>
                         </div>
                         <div class="col-span-2 mt-4">
                             <div class="text-xs uppercase text-emerald-400">NAMA PEMILIK</div>
@@ -190,7 +189,6 @@
                         </div>
                     </div>`;
             } else {
-                // E-Wallet Result
                 html += `
                     <div class="grid grid-cols-2 gap-6">
                         <div>
@@ -199,7 +197,7 @@
                         </div>
                         <div>
                             <div class="text-xs uppercase text-emerald-400">NOMOR HP</div>
-                            <div class="font-mono text-3xl">${json.data.phone_number}</div>
+                            <div class="font-mono text-2xl break-all">${json.data.phone_number}</div>
                         </div>
                         <div class="col-span-2 mt-4">
                             <div class="text-xs uppercase text-emerald-400">NAMA AKUN</div>
