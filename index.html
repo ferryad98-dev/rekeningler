@@ -38,7 +38,7 @@
         </div>
 
         <div class="grid md:grid-cols-12 gap-8">
-            <!-- Form (lebih kecil) -->
+            <!-- Form -->
             <div class="md:col-span-4 glass border border-white/10 rounded-3xl p-8 shadow-2xl">
                 <div id="form-bank">
                     <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3"><i class="fa-solid fa-building-columns text-emerald-400"></i> Cek Rekening Bank</h2>
@@ -49,7 +49,9 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-3">Nomor Rekening</label>
-                            <input id="bank-account" type="text" placeholder="1985708071" class="w-full bg-[#1f2937] border border-white/10 focus:border-emerald-400 rounded-2xl px-6 py-5 text-lg outline-none font-mono">
+                            <input id="bank-account" type="text" placeholder="1985708071" 
+                                   oninput="this.value = this.value.replace(/\D/g, '')"
+                                   class="w-full bg-[#1f2937] border border-white/10 focus:border-emerald-400 rounded-2xl px-6 py-5 text-lg outline-none font-mono">
                         </div>
                         <button onclick="cekBank()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3">🔎 CEK REKENING</button>
                     </div>
@@ -64,14 +66,16 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-3">Nomor Handphone</label>
-                            <input id="ewallet-account" type="text" placeholder="082282806789" class="w-full bg-[#1f2937] border border-white/10 focus:border-emerald-400 rounded-2xl px-6 py-5 text-lg outline-none font-mono">
+                            <input id="ewallet-account" type="text" placeholder="082282806789" 
+                                   oninput="this.value = this.value.replace(/\D/g, '')"
+                                   class="w-full bg-[#1f2937] border border-white/10 focus:border-emerald-400 rounded-2xl px-6 py-5 text-lg outline-none font-mono">
                         </div>
                         <button onclick="cekEwallet()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3">🔎 CEK E-WALLET</button>
                     </div>
                 </div>
             </div>
 
-            <!-- HASIL PENGECEKAN (SEKARANG LEBIH LEBAR & RAPI) -->
+            <!-- Hasil Pengecekan (Sudah dilebarkan) -->
             <div class="md:col-span-8">
                 <div id="result-area" class="hidden glass border border-white/10 rounded-3xl p-12 shadow-2xl min-h-[500px]">
                     <div class="flex justify-between items-center mb-8">
@@ -108,9 +112,19 @@
 
         function populateSelects() {
             const bankSelect = document.getElementById('bank-select');
-            banks.forEach(b => { const opt = document.createElement('option'); opt.value = b.code; opt.textContent = `${b.code} - ${b.name}`; bankSelect.appendChild(opt); });
+            banks.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.code;
+                opt.textContent = `${b.code} - ${b.name}`;
+                bankSelect.appendChild(opt);
+            });
             const ewSelect = document.getElementById('ewallet-select');
-            ewalletList.forEach(e => { const opt = document.createElement('option'); opt.value = e.code; opt.textContent = e.name; ewSelect.appendChild(opt); });
+            ewalletList.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e.code;
+                opt.textContent = e.name;
+                ewSelect.appendChild(opt);
+            });
         }
 
         let currentTab = 0;
