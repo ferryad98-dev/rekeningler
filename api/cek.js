@@ -2,27 +2,35 @@ export default async function handler(req, res) {
   const { type, kode, nomor } = req.query;
   const API_KEY = process.env.API_KEY;
 
-  let url = "";
+  const url = "https://app.apivalidasi.my.id/api/v3/validate";
+
+  let body = {};
 
   if (type === "bank") {
-    url = `https://app.apivalidasi.my.id/api/bank?bank_code=${kode}&account_number=${nomor}`;
+    body = {
+      type: "bank",
+      bank_code: kode,
+      account_number: nomor
+    };
   } else {
-    url = `https://app.apivalidasi.my.id/api/ewallet?ewallet_code=${kode}&phone_number=${nomor}`;
+    body = {
+      type: "ewallet",
+      ewallet_code: kode,
+      phone_number: nomor
+    };
   }
 
   try {
     const response = await fetch(url, {
-      method: "GET",
+      method: "POST", // 🔥 ini kuncinya
       headers: {
-        "Authorization": `Bearer ${API_KEY}`, // 🔥 ini penting
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+        "Authorization": API_KEY // kalau error nanti kita ubah ke Bearer
+      },
+      body: JSON.stringify(body)
     });
 
-    const text = await response.text(); // debug dulu
-    console.log(text);
-
-    const data = JSON.parse(text);
+    const data = await response.json();
 
     res.status(200).json(data);
 
