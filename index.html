@@ -15,7 +15,7 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-[#0a0f1c] via-[#111827] to-[#0f172a] text-white min-h-screen">
-    <div class="max-w-5xl mx-auto px-6 py-10">
+    <div class="max-w-6xl mx-auto px-6 py-10">
         <!-- Header -->
         <div class="flex items-center justify-between mb-12">
             <div class="flex items-center gap-4">
@@ -38,8 +38,8 @@
         </div>
 
         <div class="grid md:grid-cols-12 gap-8">
-            <!-- Form -->
-            <div class="md:col-span-5 glass border border-white/10 rounded-3xl p-8 shadow-2xl">
+            <!-- Form (lebih kecil) -->
+            <div class="md:col-span-4 glass border border-white/10 rounded-3xl p-8 shadow-2xl">
                 <div id="form-bank">
                     <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3"><i class="fa-solid fa-building-columns text-emerald-400"></i> Cek Rekening Bank</h2>
                     <div class="space-y-8">
@@ -71,8 +71,8 @@
                 </div>
             </div>
 
-            <!-- HASIL PENGECEKAN (SUDAH DIPERBAIKI - LEBIH RAPI) -->
-            <div class="md:col-span-7">
+            <!-- HASIL PENGECEKAN (SEKARANG LEBIH LEBAR & RAPI) -->
+            <div class="md:col-span-8">
                 <div id="result-area" class="hidden glass border border-white/10 rounded-3xl p-12 shadow-2xl min-h-[500px]">
                     <div class="flex justify-between items-center mb-8">
                         <h3 class="text-2xl font-semibold">Hasil Pengecekan</h3>
@@ -108,19 +108,9 @@
 
         function populateSelects() {
             const bankSelect = document.getElementById('bank-select');
-            banks.forEach(b => {
-                const opt = document.createElement('option');
-                opt.value = b.code;
-                opt.textContent = `${b.code} - ${b.name}`;
-                bankSelect.appendChild(opt);
-            });
+            banks.forEach(b => { const opt = document.createElement('option'); opt.value = b.code; opt.textContent = `${b.code} - ${b.name}`; bankSelect.appendChild(opt); });
             const ewSelect = document.getElementById('ewallet-select');
-            ewalletList.forEach(e => {
-                const opt = document.createElement('option');
-                opt.value = e.code;
-                opt.textContent = e.name;
-                ewSelect.appendChild(opt);
-            });
+            ewalletList.forEach(e => { const opt = document.createElement('option'); opt.value = e.code; opt.textContent = e.name; ewSelect.appendChild(opt); });
         }
 
         let currentTab = 0;
@@ -162,7 +152,7 @@
 
             const number = type === "bank" ? json.data.account_number : (json.data.phone_number || json.data.account_number);
 
-            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-12">`;
+            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-14">`;
             if (type === "bank") {
                 html += `
                     <div class="grid grid-cols-2 gap-12">
@@ -175,7 +165,7 @@
                             <div class="text-xs tracking-widest text-emerald-400">NOMOR REKENING</div>
                             <div class="font-mono text-4xl font-bold mt-3">${number}</div>
                         </div>
-                        <div class="col-span-2 mt-8">
+                        <div class="col-span-2 mt-10">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA PEMILIK</div>
                             <div class="text-4xl font-bold mt-3">${json.data.account_name}</div>
                         </div>
@@ -191,7 +181,7 @@
                             <div class="text-xs tracking-widest text-emerald-400">NOMOR HP</div>
                             <div class="font-mono text-4xl font-bold mt-3">${number}</div>
                         </div>
-                        <div class="col-span-2 mt-8">
+                        <div class="col-span-2 mt-10">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA AKUN</div>
                             <div class="text-4xl font-bold mt-3">${json.data.account_name}</div>
                         </div>
