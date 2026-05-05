@@ -12,12 +12,11 @@
         .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); }
         .result-box { animation: fadeInScale 0.4s ease forwards; }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .toast { animation: toastIn 0.3s ease, toastOut 0.3s 2.7s ease forwards; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-[#0a0f1c] via-[#111827] to-[#0f172a] text-white min-h-screen">
     <div class="max-w-5xl mx-auto px-6 py-10">
-        <!-- Header Premium -->
+        <!-- Header -->
         <div class="flex items-center justify-between mb-12">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-3xl flex items-center justify-center text-4xl shadow-2xl shadow-emerald-500/30">💰</div>
@@ -41,7 +40,6 @@
         <div class="grid md:grid-cols-12 gap-8">
             <!-- Form -->
             <div class="md:col-span-5 glass border border-white/10 rounded-3xl p-8 shadow-2xl">
-                <!-- BANK FORM -->
                 <div id="form-bank">
                     <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3"><i class="fa-solid fa-building-columns text-emerald-400"></i> Cek Rekening Bank</h2>
                     <div class="space-y-8">
@@ -53,13 +51,10 @@
                             <label class="block text-sm text-gray-400 mb-3">Nomor Rekening</label>
                             <input id="bank-account" type="text" placeholder="1985708071" class="w-full bg-white/5 border border-white/10 focus:border-emerald-400 rounded-2xl px-6 py-5 text-lg outline-none font-mono">
                         </div>
-                        <button onclick="cekBank()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 transition-all text-white font-semibold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/40">
-                            🔎 CEK REKENING
-                        </button>
+                        <button onclick="cekBank()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3">🔎 CEK REKENING</button>
                     </div>
                 </div>
 
-                <!-- EWALLET FORM -->
                 <div id="form-ewallet" class="hidden">
                     <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3"><i class="fa-solid fa-wallet text-emerald-400"></i> Cek E-Wallet</h2>
                     <div class="space-y-8">
@@ -69,29 +64,27 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-3">Nomor Handphone</label>
-                            <input id="ewallet-account" type="text" placeholder="083172113199" class="w-full bg-white/5 border border-white/10 focus:border-emerald-400 rounded-2xl px-6 py-5 text-lg outline-none font-mono">
+                            <input id="ewallet-account" type="text" placeholder="082274164719" class="w-full bg-white/5 border border-white/10 focus:border-emerald-400 rounded-2xl px-6 py-5 text-lg outline-none font-mono">
                         </div>
-                        <button onclick="cekEwallet()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 transition-all text-white font-semibold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/40">
-                            🔎 CEK E-WALLET
-                        </button>
+                        <button onclick="cekEwallet()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold text-2xl py-6 rounded-3xl flex items-center justify-center gap-3">🔎 CEK E-WALLET</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Result -->
+            <!-- HASIL PENGECEKAN (DIBESARKAN) -->
             <div class="md:col-span-7">
-                <div id="result-area" class="hidden glass border border-white/10 rounded-3xl p-8 shadow-2xl min-h-[440px]">
+                <div id="result-area" class="hidden glass border border-white/10 rounded-3xl p-10 shadow-2xl min-h-[480px]">
                     <div class="flex justify-between items-center mb-8">
                         <h3 class="text-2xl font-semibold">Hasil Pengecekan</h3>
-                        <button onclick="resetForm()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                        <button onclick="resetForm()" class="text-gray-400 hover:text-white flex items-center gap-2"><i class="fa-solid fa-rotate-right"></i> Reset</button>
                     </div>
                     <div id="result-content" class="result-box"></div>
                 </div>
 
-                <div id="empty-state" class="glass border border-white/10 rounded-3xl p-16 text-center min-h-[440px] flex flex-col items-center justify-center">
+                <div id="empty-state" class="glass border border-white/10 rounded-3xl p-16 text-center min-h-[480px] flex flex-col items-center justify-center">
                     <div class="text-8xl mb-8 opacity-40">🔎</div>
                     <h3 class="text-3xl font-medium mb-4">Siap mengecek?</h3>
-                    <p class="text-gray-400 max-w-md">Pilih jenis cek di atas, isi data, lalu tekan tombol CEK</p>
+                    <p class="text-gray-400">Pilih jenis cek, isi data, lalu tekan tombol CEK</p>
                 </div>
             </div>
         </div>
@@ -106,14 +99,13 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="hidden fixed bottom-6 right-6 bg-emerald-600 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 toast">
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed bottom-8 right-8 bg-emerald-600 text-white px-6 py-4 rounded-3xl shadow-2xl flex items-center gap-3">
         <i class="fa-solid fa-check-circle"></i>
-        <span id="toast-text" class="font-medium"></span>
+        <span id="toast-text" class="font-medium">Nomor berhasil disalin!</span>
     </div>
 
     <script>
-        // Data
         const banks = [{code:"014",name:"BCA"},{code:"009",name:"BNI"},{code:"002",name:"BRI"},{code:"451",name:"BSI"},{code:"022",name:"CIMB"},{code:"542",name:"JAGO"},{code:"213",name:"JENIUS"},{code:"008",name:"MANDIRI"},{code:"426",name:"MEGA"},{code:"019",name:"PANIN"},{code:"013",name:"PERMATA"},{code:"535",name:"SEABANK"},{code:"153",name:"SINARMAS"}];
         const ewalletList = [{code:"dana",name:"DANA"},{code:"gopay",name:"GOPAY"},{code:"linkaja",name:"LINKAJA"},{code:"ovo",name:"OVO"},{code:"shopeepay",name:"SHOPEEPAY"}];
 
@@ -122,28 +114,18 @@
 
         function populateSelects() {
             const bankSelect = document.getElementById('bank-select');
-            banks.forEach(b => {
-                const opt = document.createElement('option');
-                opt.value = b.code;
-                opt.textContent = `${b.code} - ${b.name}`;
-                bankSelect.appendChild(opt);
-            });
+            banks.forEach(b => { const opt = document.createElement('option'); opt.value = b.code; opt.textContent = `${b.code} - ${b.name}`; bankSelect.appendChild(opt); });
 
             const ewSelect = document.getElementById('ewallet-select');
-            ewalletList.forEach(e => {
-                const opt = document.createElement('option');
-                opt.value = e.code;
-                opt.textContent = e.name;
-                ewSelect.appendChild(opt);
-            });
+            ewalletList.forEach(e => { const opt = document.createElement('option'); opt.value = e.code; opt.textContent = e.name; ewSelect.appendChild(opt); });
         }
 
         let currentTab = 0;
         function switchTab(tab) {
             currentTab = tab;
-            document.querySelectorAll('.tab-button').forEach((btn, i) => {
-                if (i === tab) btn.classList.add('border-emerald-400', 'text-emerald-400');
-                else btn.classList.remove('border-emerald-400', 'text-emerald-400');
+            document.querySelectorAll('.tab-button').forEach((btn,i) => {
+                if(i===tab) btn.classList.add('border-emerald-400','text-emerald-400');
+                else btn.classList.remove('border-emerald-400','text-emerald-400');
             });
             document.getElementById('form-bank').classList.toggle('hidden', tab !== 0);
             document.getElementById('form-ewallet').classList.toggle('hidden', tab === 0);
@@ -154,82 +136,74 @@
             const content = document.getElementById('result-content');
             const resultArea = document.getElementById('result-area');
             const empty = document.getElementById('empty-state');
-
-            content.innerHTML = `<div class="flex flex-col items-center justify-center py-20"><div class="w-14 h-14 border-4 border-emerald-400 border-t-transparent animate-spin rounded-full mb-6"></div><p class="text-xl font-medium">Sedang mengecek...</p></div>`;
+            
+            content.innerHTML = `<div class="flex flex-col items-center justify-center py-24"><div class="w-14 h-14 border-4 border-emerald-400 border-t-transparent animate-spin rounded-full mb-6"></div><p class="text-xl">Sedang mengecek...</p></div>`;
             resultArea.classList.remove('hidden');
             empty.classList.add('hidden');
 
             try {
-                const res = await fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+                const res = await fetch(API_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
                 const data = await res.json();
                 renderResult(data, payload.type);
-            } catch (e) {
-                content.innerHTML = `<div class="bg-red-950/70 border border-red-500 rounded-3xl p-12 text-center"><p class="text-2xl">Gagal terhubung ke API</p></div>`;
+            } catch(e) {
+                content.innerHTML = `<div class="text-center text-red-400 text-xl">Gagal terhubung ke API</div>`;
             }
         }
 
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
                 const toast = document.getElementById('toast');
-                document.getElementById('toast-text').textContent = '✅ Nomor berhasil disalin!';
-                toast.classList.remove('hidden');
-                setTimeout(() => toast.classList.add('hidden'), 3000);
+                document.getElementById('toast-text').innerHTML = '✅ Nomor berhasil disalin!';
+                toast.style.display = 'flex';
+                setTimeout(() => toast.style.display = 'none', 2800);
             });
         }
 
         function renderResult(json, type) {
             const content = document.getElementById('result-content');
             if (!json.status) {
-                content.innerHTML = `<div class="bg-red-950/70 border border-red-500 rounded-3xl p-12 text-center"><p class="text-xl">${json.message || 'Gagal'}</p></div>`;
+                content.innerHTML = `<div class="bg-red-950/70 border border-red-500 rounded-3xl p-12 text-center"><p class="text-xl">${json.message}</p></div>`;
                 return;
             }
 
             const number = type === "bank" ? json.data.account_number : (json.data.phone_number || json.data.account_number);
 
-            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-8">`;
+            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-10">`;
             if (type === "bank") {
                 html += `
-                    <div class="grid grid-cols-2 gap-8">
+                    <div class="grid grid-cols-2 gap-10">
                         <div>
                             <div class="text-xs tracking-widest text-emerald-400">BANK</div>
-                            <div class="text-4xl font-bold mt-1">${json.data.bank_name}</div>
+                            <div class="text-4xl font-bold mt-2">${json.data.bank_name}</div>
                             <div class="text-sm text-gray-400">Kode ${json.data.bank_code}</div>
                         </div>
                         <div>
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="text-xs tracking-widest text-emerald-400">NOMOR REKENING</div>
-                                    <div class="font-mono text-4xl font-bold mt-1">${number}</div>
-                                </div>
-                                <button onclick="copyToClipboard('${number}')" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-5 py-3 rounded-2xl text-sm font-medium transition-all">
-                                    📋 Copy
-                                </button>
+                            <div class="text-xs tracking-widest text-emerald-400">NOMOR REKENING</div>
+                            <div class="flex justify-between items-center mt-2">
+                                <div class="font-mono text-4xl font-bold">${number}</div>
+                                <button onclick="copyToClipboard('${number}')" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl text-sm font-medium">📋 Copy</button>
                             </div>
                         </div>
-                        <div class="col-span-2">
+                        <div class="col-span-2 mt-6">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA PEMILIK</div>
                             <div class="text-4xl font-bold mt-2">${json.data.account_name}</div>
                         </div>
                     </div>`;
             } else {
                 html += `
-                    <div class="grid grid-cols-2 gap-8">
+                    <div class="grid grid-cols-2 gap-10">
                         <div>
                             <div class="text-xs tracking-widest text-emerald-400">E-WALLET</div>
-                            <div class="text-4xl font-bold mt-1">${json.data.ewallet_name}</div>
+                            <div class="text-4xl font-bold mt-2">${json.data.ewallet_name}</div>
                         </div>
                         <div>
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="text-xs tracking-widest text-emerald-400">NOMOR HP</div>
-                                    <div class="font-mono text-4xl font-bold mt-1">${number}</div>
-                                </div>
-                                <button onclick="copyToClipboard('${number}')" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-5 py-3 rounded-2xl text-sm font-medium transition-all">
-                                    📋 Copy
-                                </button>
+                            <div class="text-xs tracking-widest text-emerald-400">NOMOR HP</div>
+                            <div class="flex justify-between items-center mt-2">
+                                <div class="font-mono text-4xl font-bold">${number}</div>
+                                <button onclick="copyToClipboard('${number}')" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl text-sm font-medium">📋 Copy</button>
                             </div>
                         </div>
-                        <div class="col-span-2">
+                        <div class="col-span-2 mt-6">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA AKUN</div>
                             <div class="text-4xl font-bold mt-2">${json.data.account_name}</div>
                         </div>
@@ -240,10 +214,16 @@
             saveToHistory(json, type);
         }
 
-        // Riwayat, cekBank, cekEwallet, resetForm, dll tetap sama seperti sebelumnya (singkat agar tidak terlalu panjang)
-        function saveToHistory(json, type) { /* sama seperti sebelumnya */ 
+        function saveToHistory(json, type) {
             let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
-            const entry = {id: Date.now(), timestamp: new Date().toLocaleString('id-ID'), type: type==="bank"?"Bank":"E-Wallet", name: type==="bank"?json.data.bank_name:json.data.ewallet_name, number: type==="bank"?json.data.account_number:(json.data.phone_number||json.data.account_number), accountName: json.data.account_name};
+            const entry = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('id-ID'),
+                type: type === "bank" ? "Bank" : "E-Wallet",
+                name: type === "bank" ? json.data.bank_name : json.data.ewallet_name,
+                number: type === "bank" ? json.data.account_number : (json.data.phone_number || json.data.account_number),
+                accountName: json.data.account_name
+            };
             history.unshift(entry);
             if (history.length > 8) history.pop();
             localStorage.setItem('cekHistory', JSON.stringify(history));
@@ -259,13 +239,13 @@
             }
             let html = '';
             history.forEach(item => {
-                html += `<div class="flex justify-between items-center bg-white/5 hover:bg-white/10 rounded-3xl px-6 py-5 transition-all"><div><span class="text-xs px-4 py-1 bg-white/10 rounded-full">${item.type}</span><span class="ml-3 font-medium">${item.name}</span><div class="font-mono text-xl mt-2">${item.number}</div><div class="text-sm text-gray-400">${item.accountName}</div></div><div class="text-xs text-gray-400">${item.timestamp}</div></div>`;
+                html += `<div class="flex justify-between items-center bg-white/5 hover:bg-white/10 rounded-3xl px-6 py-5"><div><span class="text-xs px-4 py-1 bg-white/10 rounded-full">${item.type}</span><span class="ml-3 font-medium">${item.name}</span><div class="font-mono text-xl mt-2">${item.number}</div><div class="text-sm text-gray-400">${item.accountName}</div></div><div class="text-xs text-gray-400">${item.timestamp}</div></div>`;
             });
             list.innerHTML = html;
         }
 
         function clearHistory() {
-            if (confirm('Hapus semua riwayat?')) {
+            if (confirm('Hapus semua riwayat pengecekan?')) {
                 localStorage.removeItem('cekHistory');
                 renderHistory();
             }
