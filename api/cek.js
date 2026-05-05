@@ -1,5 +1,6 @@
 export default async function handler(req, res) {
   const { type, kode, nomor } = req.query;
+
   const API_KEY = process.env.API_KEY;
 
   const url = "https://app.apivalidasi.my.id/api/v3/validate";
@@ -22,10 +23,10 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(url, {
-      method: "POST", // 🔥 ini kuncinya
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": API_KEY // kalau error nanti kita ubah ke Bearer
+        "Authorization": API_KEY
       },
       body: JSON.stringify(body)
     });
