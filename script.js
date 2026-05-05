@@ -3,26 +3,49 @@ async function cek() {
   const kode = document.getElementById("kode").value;
   const nomor = document.getElementById("nomor").value;
 
-  const res = await fetch(`/api/cek?type=${type}&kode=${kode}&nomor=${nomor}`);
-  const data = await res.json();
+  const resultBox = document.getElementById("result");
+  const loader = document.getElementById("loader");
 
-  let hasil = "";
+  resultBox.style.display = "none";
+  loader.style.display = "block";
 
-  if (!data.status) {
-    hasil = "❌ Gagal";
-  } else {
+  try {
+    const res = await fetch(`/api/cek?type=${type}&kode=${kode}&nomor=${nomor}`);
+    const data = await res.json();
+
+    loader.style.display = "none";
+    resultBox.style.display = "block";
+
+    if (!data.status) {
+      resultBox.className = "result error";
+      resultBox.innerHTML = "❌ Data tidak ditemukan / error";
+      return;
+    }
+
     if (type === "bank") {
-      hasil = `
-        Bank: ${data.data.bank_name} <br>
-        Nama: ${data.data.account_name}
+      resultBox.className = "result success";
+      resultBox.innerHTML = `
+        <b>🏦 ${data.data.bank_name}</b><br><br>
+        <small>No Rekening</small><br>
+        ${data.data.account_number}<br><br>
+        <small>Nama Pemilik</small><br>
+        <b>${data.data.account_name}</b>
       `;
     } else {
-      hasil = `
-        Ewallet: ${data.data.ewallet_name} <br>
-        Nama: ${data.data.account_name}
+      resultBox.className = "result success";
+      resultBox.innerHTML = `
+        <b>💳 ${data.data.ewallet_name}</b><br><br>
+        <small>No HP</small><br>
+        ${data.data.phone_number}<br><br>
+        <small>Nama Pemilik</small><br>
+        <b>${data.data.account_name}</b>
       `;
     }
-  }
 
-  document.getElementById("result").innerHTML = hasil;
+  } catch (err) {
+    loader.style.display = "none";
+    resultBox.style.display = "block";
+    resultBox.className = "result error";
+    resultBox.innerHTML = "❌ Server error";
+  }
 }
