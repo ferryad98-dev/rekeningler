@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <!-- HASIL PENGECEKAN (SUDAH DILEBARKAN LAGI) -->
+            <!-- Hasil Pengecekan (Lebih Lebar) -->
             <div class="md:col-span-8">
                 <div id="result-area" class="hidden glass border border-white/10 rounded-3xl p-14 shadow-2xl min-h-[520px]">
                     <div class="flex justify-between items-center mb-8">
@@ -166,10 +166,10 @@
 
             const number = type === "bank" ? json.data.account_number : (json.data.phone_number || json.data.account_number);
 
-            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-16">`;
+            let html = `<div class="bg-gradient-to-br from-emerald-900/40 to-cyan-900/20 border border-emerald-400/30 rounded-3xl p-14">`;
             if (type === "bank") {
                 html += `
-                    <div class="grid grid-cols-2 gap-14">
+                    <div class="grid grid-cols-2 gap-12">
                         <div>
                             <div class="text-xs tracking-widest text-emerald-400">BANK</div>
                             <div class="text-4xl font-bold mt-3">${json.data.bank_name}</div>
@@ -179,14 +179,14 @@
                             <div class="text-xs tracking-widest text-emerald-400">NOMOR REKENING</div>
                             <div class="font-mono text-4xl font-bold mt-3">${number}</div>
                         </div>
-                        <div class="col-span-2 mt-12">
+                        <div class="col-span-2 mt-10">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA PEMILIK</div>
                             <div class="text-4xl font-bold mt-3">${json.data.account_name}</div>
                         </div>
                     </div>`;
             } else {
                 html += `
-                    <div class="grid grid-cols-2 gap-14">
+                    <div class="grid grid-cols-2 gap-12">
                         <div>
                             <div class="text-xs tracking-widest text-emerald-400">E-WALLET</div>
                             <div class="text-4xl font-bold mt-3">${json.data.ewallet_name}</div>
@@ -195,7 +195,7 @@
                             <div class="text-xs tracking-widest text-emerald-400">NOMOR HP</div>
                             <div class="font-mono text-4xl font-bold mt-3">${number}</div>
                         </div>
-                        <div class="col-span-2 mt-12">
+                        <div class="col-span-2 mt-10">
                             <div class="text-xs tracking-widest text-emerald-400">NAMA AKUN</div>
                             <div class="text-4xl font-bold mt-3">${json.data.account_name}</div>
                         </div>
@@ -206,7 +206,6 @@
             saveToHistory(json, type);
         }
 
-        // Riwayat, fungsi cek, dll (tetap sama)
         function saveToHistory(json, type) {
             let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
             const entry = {
@@ -268,6 +267,18 @@
         window.onload = () => {
             populateSelects();
             renderHistory();
+
+            // === FITUR ENTER ===
+            const bankInput = document.getElementById('bank-account');
+            const ewalletInput = document.getElementById('ewallet-account');
+
+            bankInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') cekBank();
+            });
+
+            ewalletInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') cekEwallet();
+            });
         };
     </script>
 </body>
