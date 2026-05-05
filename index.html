@@ -67,7 +67,7 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-2">Nomor Handphone</label>
-                            <input id="ewallet-account" type="text" placeholder="089514582678" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
+                            <input id="ewallet-account" type="text" placeholder="081322700084" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
                         </div>
                         <button onclick="cekEwallet()" class="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white font-semibold text-xl py-5 rounded-3xl flex items-center justify-center gap-3 shadow-lg">
                             🔎 CEK E-WALLET
@@ -91,7 +91,7 @@
                 <div id="empty-state" class="bg-gray-900/30 border border-dashed border-gray-700 rounded-3xl p-12 text-center min-h-[420px] flex flex-col items-center justify-center">
                     <div class="text-7xl mb-6 opacity-30">🔎</div>
                     <h3 class="text-2xl font-medium mb-3">Siap mengecek?</h3>
-                    <p class="text-gray-400 max-w-xs">Pilih jenis cek, isi data, lalu tekan tombol CEK REKENING</p>
+                    <p class="text-gray-400 max-w-xs">Pilih jenis cek, isi data, lalu tekan tombol CEK</p>
                 </div>
             </div>
         </div>
@@ -109,8 +109,22 @@
     </div>
 
     <script>
-        const banks = [{code:"014",name:"BCA"},{code:"009",name:"BNI"},{code:"002",name:"BRI"},{code:"451",name:"BSI"},{code:"022",name:"CIMB"},{code:"542",name:"JAGO"},{code:"213",name:"JENIUS"},{code:"008",name:"MANDIRI"},{code:"426",name:"MEGA"},{code:"019",name:"PANIN"},{code:"013",name:"PERMATA"},{code:"535",name:"SEABANK"},{code:"153",name:"SINARMAS"}];
-        const ewalletList = [{code:"wallet_dana",name:"DANA"},{code:"wallet_gopay",name:"GOPAY"},{code:"wallet_linkaja",name:"LINKAJA"},{code:"wallet_ovo",name:"OVO"},{code:"wallet_shopeepay",name:"SHOPEEPAY"}];
+        const banks = [
+            {code:"014",name:"BCA"},{code:"009",name:"BNI"},{code:"002",name:"BRI"},{code:"451",name:"BSI"},
+            {code:"022",name:"CIMB"},{code:"542",name:"JAGO"},{code:"213",name:"JENIUS"},{code:"008",name:"MANDIRI"},
+            {code:"426",name:"MEGA"},{code:"019",name:"PANIN"},{code:"013",name:"PERMATA"},{code:"535",name:"SEABANK"},
+            {code:"153",name:"SINARMAS"}
+        ];
+
+        // KODE E-WALLET YANG BARU (sudah di-update)
+        const ewalletList = [
+            {code:"wallet_dana", name:"DANA"},
+            {code:"gopay_user", name:"GOPAY"},
+            {code:"wallet_linkaja", name:"LINKAJA"},
+            {code:"wallet_ovo", name:"OVO"},
+            {code:"wallet_shopeepay", name:"SHOPEEPAY"}
+        ];
+
         const API_KEY = "ckr_ec10ee996a9e476386c5ae1e7be28123";
         const API_URL = "/api/validate";
 
@@ -122,6 +136,7 @@
                 opt.textContent = `${b.code} - ${b.name}`;
                 bankSelect.appendChild(opt);
             });
+
             const ewSelect = document.getElementById('ewallet-select');
             ewalletList.forEach(e => {
                 const opt = document.createElement('option');
@@ -211,13 +226,12 @@
             html += `</div>`;
             content.innerHTML = html;
 
-            // Simpan ke riwayat
             saveToHistory(json, type);
         }
 
+        // === RIWAYAT (tetap sama seperti sebelumnya) ===
         function saveToHistory(json, type) {
             let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
-            
             const entry = {
                 id: Date.now(),
                 timestamp: new Date().toLocaleString('id-ID'),
@@ -226,10 +240,8 @@
                 number: type === "bank" ? json.data.account_number : json.data.phone_number,
                 accountName: type === "bank" ? json.data.account_name : json.data.account_name
             };
-
             history.unshift(entry);
             if (history.length > 8) history.pop();
-            
             localStorage.setItem('cekHistory', JSON.stringify(history));
             renderHistory();
         }
@@ -237,12 +249,10 @@
         function renderHistory() {
             const list = document.getElementById('history-list');
             let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
-            
             if (history.length === 0) {
                 list.innerHTML = `<p class="text-gray-400 text-center py-8">Belum ada riwayat pengecekan</p>`;
                 return;
             }
-
             let html = '';
             history.forEach(item => {
                 html += `
@@ -255,9 +265,7 @@
                             <div class="font-mono text-lg mt-1">${item.number}</div>
                             <div class="text-sm text-gray-400">${item.accountName}</div>
                         </div>
-                        <div class="text-right text-xs text-gray-400">
-                            ${item.timestamp}
-                        </div>
+                        <div class="text-right text-xs text-gray-400">${item.timestamp}</div>
                     </div>`;
             });
             list.innerHTML = html;
@@ -294,7 +302,7 @@
         window.onload = () => {
             populateSelects();
             renderHistory();
-            console.log('%c✅ CEK REKENING siap dengan Riwayat!', 'color:#10b981;font-weight:bold');
+            console.log('%c✅ CEK REKENING + E-WALLET siap!', 'color:#10b981;font-weight:bold');
         };
     </script>
 </body>
