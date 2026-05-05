@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Cek Rekening</title>
+</head>
+
+<body>
+
+<h2>Cek Rekening / Ewallet</h2>
+
+<select id="type">
+  <option value="bank">Bank</option>
+  <option value="ewallet">Ewallet</option>
+</select>
+
+<input type="text" id="kode" placeholder="Kode (014 / gopay_user)">
+<input type="text" id="nomor" placeholder="Nomor rekening / HP">
+
+<button onclick="cek()">Cek</button>
+
+<div id="result"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
