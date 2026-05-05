@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-400 mb-2">Nomor Rekening</label>
-                            <input id="bank-account" type="text" placeholder="000801095430501" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
+                            <input id="bank-account" type="text" placeholder="1985708071" class="w-full bg-gray-800 border border-gray-700 focus:border-emerald-500 rounded-2xl px-5 py-4 text-lg outline-none font-mono">
                         </div>
                         <button onclick="cekBank()" class="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white font-semibold text-xl py-5 rounded-3xl flex items-center justify-center gap-3 shadow-lg">
                             🔎 CEK REKENING
@@ -95,19 +95,22 @@
                 </div>
             </div>
         </div>
+
+        <!-- RIWAYAT PENGECEKAN -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold flex items-center gap-2"><i class="fa-solid fa-clock"></i> Riwayat Pengecekan</h3>
+                <button onclick="clearHistory()" class="text-red-400 hover:text-red-500 text-sm flex items-center gap-1">
+                    <i class="fa-solid fa-trash"></i> Hapus Semua
+                </button>
+            </div>
+            <div id="history-list" class="bg-gray-900/70 border border-gray-700 rounded-3xl p-6 space-y-3 max-h-96 overflow-y-auto"></div>
+        </div>
     </div>
 
     <script>
-        const banks = [
-            {code:"014",name:"BCA"},{code:"009",name:"BNI"},{code:"002",name:"BRI"},{code:"451",name:"BSI"},
-            {code:"022",name:"CIMB"},{code:"542",name:"JAGO"},{code:"213",name:"JENIUS"},{code:"008",name:"MANDIRI"},
-            {code:"426",name:"MEGA"},{code:"019",name:"PANIN"},{code:"013",name:"PERMATA"},{code:"535",name:"SEABANK"},
-            {code:"153",name:"SINARMAS"}
-        ];
-        const ewalletList = [
-            {code:"wallet_dana",name:"DANA"},{code:"wallet_gopay",name:"GOPAY"},{code:"wallet_linkaja",name:"LINKAJA"},
-            {code:"wallet_ovo",name:"OVO"},{code:"wallet_shopeepay",name:"SHOPEEPAY"}
-        ];
+        const banks = [{code:"014",name:"BCA"},{code:"009",name:"BNI"},{code:"002",name:"BRI"},{code:"451",name:"BSI"},{code:"022",name:"CIMB"},{code:"542",name:"JAGO"},{code:"213",name:"JENIUS"},{code:"008",name:"MANDIRI"},{code:"426",name:"MEGA"},{code:"019",name:"PANIN"},{code:"013",name:"PERMATA"},{code:"535",name:"SEABANK"},{code:"153",name:"SINARMAS"}];
+        const ewalletList = [{code:"wallet_dana",name:"DANA"},{code:"wallet_gopay",name:"GOPAY"},{code:"wallet_linkaja",name:"LINKAJA"},{code:"wallet_ovo",name:"OVO"},{code:"wallet_shopeepay",name:"SHOPEEPAY"}];
         const API_KEY = "ckr_ec10ee996a9e476386c5ae1e7be28123";
         const API_URL = "/api/validate";
 
@@ -156,13 +159,13 @@
                     body: JSON.stringify(payload)
                 });
                 const data = await res.json();
-                renderResult(data);
+                renderResult(data, payload.type);
             } catch (e) {
                 content.innerHTML = `<div class="bg-red-950 border border-red-500 rounded-2xl p-8 text-center"><i class="fa-solid fa-triangle-exclamation text-5xl text-red-400 mb-4"></i><p class="text-xl">Gagal terhubung ke API</p></div>`;
             }
         }
 
-        function renderResult(json) {
+        function renderResult(json, type) {
             const content = document.getElementById('result-content');
             if (!json.status) {
                 content.innerHTML = `<div class="bg-red-950/60 border border-red-400 rounded-2xl p-8 text-center"><p class="text-xl">${json.message || 'Gagal'}</p></div>`;
@@ -171,7 +174,7 @@
 
             let html = `<div class="bg-emerald-900/30 border border-emerald-500/30 rounded-2xl p-6">`;
             
-            if (json.data.bank_name) {
+            if (type === "bank") {
                 html += `
                     <div class="grid grid-cols-2 gap-6">
                         <div>
@@ -181,7 +184,7 @@
                         </div>
                         <div>
                             <div class="text-xs uppercase text-emerald-400">NOMOR REKENING</div>
-                            <div class="font-mono text-2xl break-all">${json.data.account_number}</div>
+                            <div class="font-mono text-3xl font-bold">${json.data.account_number}</div>
                         </div>
                         <div class="col-span-2 mt-4">
                             <div class="text-xs uppercase text-emerald-400">NAMA PEMILIK</div>
@@ -197,7 +200,7 @@
                         </div>
                         <div>
                             <div class="text-xs uppercase text-emerald-400">NOMOR HP</div>
-                            <div class="font-mono text-2xl break-all">${json.data.phone_number}</div>
+                            <div class="font-mono text-3xl font-bold">${json.data.phone_number}</div>
                         </div>
                         <div class="col-span-2 mt-4">
                             <div class="text-xs uppercase text-emerald-400">NAMA AKUN</div>
@@ -207,6 +210,64 @@
             }
             html += `</div>`;
             content.innerHTML = html;
+
+            // Simpan ke riwayat
+            saveToHistory(json, type);
+        }
+
+        function saveToHistory(json, type) {
+            let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
+            
+            const entry = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('id-ID'),
+                type: type === "bank" ? "Bank" : "E-Wallet",
+                name: type === "bank" ? json.data.bank_name : json.data.ewallet_name,
+                number: type === "bank" ? json.data.account_number : json.data.phone_number,
+                accountName: type === "bank" ? json.data.account_name : json.data.account_name
+            };
+
+            history.unshift(entry);
+            if (history.length > 8) history.pop();
+            
+            localStorage.setItem('cekHistory', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
+            
+            if (history.length === 0) {
+                list.innerHTML = `<p class="text-gray-400 text-center py-8">Belum ada riwayat pengecekan</p>`;
+                return;
+            }
+
+            let html = '';
+            history.forEach(item => {
+                html += `
+                    <div class="flex justify-between items-center bg-gray-800/50 hover:bg-gray-800 rounded-2xl px-5 py-4 transition-colors">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs px-3 py-1 bg-gray-700 rounded-full">${item.type}</span>
+                                <span class="text-emerald-400 font-medium">${item.name}</span>
+                            </div>
+                            <div class="font-mono text-lg mt-1">${item.number}</div>
+                            <div class="text-sm text-gray-400">${item.accountName}</div>
+                        </div>
+                        <div class="text-right text-xs text-gray-400">
+                            ${item.timestamp}
+                        </div>
+                    </div>`;
+            });
+            list.innerHTML = html;
+        }
+
+        function clearHistory() {
+            if (confirm('Hapus semua riwayat pengecekan?')) {
+                localStorage.removeItem('cekHistory');
+                renderHistory();
+            }
         }
 
         function cekBank() {
@@ -232,7 +293,8 @@
 
         window.onload = () => {
             populateSelects();
-            console.log('%c✅ CEK REKENING siap!', 'color:#10b981;font-weight:bold');
+            renderHistory();
+            console.log('%c✅ CEK REKENING siap dengan Riwayat!', 'color:#10b981;font-weight:bold');
         };
     </script>
 </body>
